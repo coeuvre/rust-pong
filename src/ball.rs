@@ -29,6 +29,14 @@ impl Ball {
         }
     }
 
+    pub fn aabb(&self) -> AABB {
+        self.aabb.trans(self.pos)
+    }
+
+    pub fn position(&self) -> Vec2d {
+        self.pos
+    }
+
     pub fn update(
         &mut self, dt: f64,
         top_wall_aabb: &AABB,

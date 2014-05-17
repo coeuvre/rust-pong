@@ -42,16 +42,8 @@ impl Player {
         self.pos = Vec2d([pos[0], pos[1]]);
     }
 
-    pub fn is_moving_up(&self) -> bool {
-        self.vy < 0.0
-    }
-
     pub fn start_moving_up(&mut self) {
         self.vy = -settings::PLAYER_MOVE_SPEED;
-    }
-
-    pub fn is_moving_down(&self) -> bool {
-        self.vy > 0.0
     }
 
     pub fn start_moving_down(&mut self) {

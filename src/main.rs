@@ -9,6 +9,7 @@ extern crate piston;
 use piston::*;
 
 mod aabb;
+mod ai;
 mod ball;
 mod player;
 mod pong_app;

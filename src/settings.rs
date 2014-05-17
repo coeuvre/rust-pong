@@ -9,7 +9,10 @@ pub static PLAYER_IMAGE: &'static str = "player.png";
 pub static PLAYER_MOVE_SPEED: f64 = 300.0;
 pub static PLAYER_PADDING: f64 = 16.0;
 
-pub static BALL_MOVE_SPEED: f64 = 500.0;
+pub static BALL_MOVE_SPEED: f64 = 550.0;
 
 pub static WALL_RADIUS: f64 = 8.0;
+
+pub static AI_SLEEP_TIME: f64 = 0.3;
+pub static AI_AWAKE_TIME: f64 = 0.5;
 

@@ -3,6 +3,7 @@ use graphics::*;
 use piston::*;
 
 use aabb::AABB;
+use ai::AI;
 use ball::Ball;
 use settings;
 use player::Player;
@@ -15,6 +16,7 @@ pub struct App {
     player1: Option<Player>,
     player2: Option<Player>,
     ball: Option<Ball>,
+    ai: Option<AI>,
 
     top_wall_aabb: AABB,
     bottom_wall_aabb: AABB,
@@ -35,6 +37,7 @@ impl App {
             player1: None,
             player2: None,
             ball: None,
+            ai: None,
 
             top_wall_aabb: AABB::new(
                 settings::WINDOW_SIZE[0] as f64 / 2.0,
@@ -76,20 +79,18 @@ impl Game for App {
         self.ball.get_ref().render(c, gl);
     }
 
-    fn update(&mut self, dt: f64, asset_store: &mut AssetStore) {
+    fn update(&mut self, dt: f64, _asset_store: &mut AssetStore) {
         if self.is_up_holding && self.is_down_holding {
             self.player1.get_mut_ref().stop_move();
-            self.player2.get_mut_ref().stop_move();
         } else if self.is_up_holding {
             self.player1.get_mut_ref().start_moving_up();
-            self.player2.get_mut_ref().start_moving_up();
         } else if self.is_down_holding {
             self.player1.get_mut_ref().start_moving_down();
-            self.player2.get_mut_ref().start_moving_down();
         } else {
             self.player1.get_mut_ref().stop_move();
-            self.player2.get_mut_ref().stop_move();
         }
+
+        self.ai.get_mut_ref().update(dt, self.player2.get_mut_ref(), self.ball.get_mut_ref());
 
         self.player1.get_mut_ref().update(dt, &self.top_wall_aabb, &self.bottom_wall_aabb);
         self.player2.get_mut_ref().update(dt, &self.top_wall_aabb, &self.bottom_wall_aabb);
@@ -109,6 +110,8 @@ impl Game for App {
 
         self.ball = Some(Ball::new(self.ball_image.unwrap()));
         self.ball.get_mut_ref().reset();
+
+        self.ai = Some(AI::new());
     }
 
     fn key_press(
