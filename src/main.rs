@@ -1,13 +1,15 @@
 
 #![feature(globs)]
 
+extern crate rand;
+
 extern crate graphics;
 extern crate piston;
 
 use piston::*;
 
 mod aabb;
-//mod ball;
+mod ball;
 mod player;
 mod pong_app;
 mod settings;

@@ -1,5 +1,4 @@
 
-
 use graphics::*;
 use piston::*;
 
@@ -38,10 +37,9 @@ impl Player {
         self.score
     }
 
-    pub fn offset(&mut self, offset: Vec2d) {
-        let Vec2d(pos) = self.pos;
-        let Vec2d(offset) = offset;
-        self.pos = Vec2d([pos[0] + offset[0], pos[1] + offset[1]]);
+    pub fn set_pos(&mut self, pos: Vec2d) {
+        let Vec2d(pos) = pos;
+        self.pos = Vec2d([pos[0], pos[1]]);
     }
 
     pub fn is_moving_up(&self) -> bool {
@@ -101,3 +99,4 @@ impl Player {
         self.pos = Vec2d(pos);
     }
 }
+
