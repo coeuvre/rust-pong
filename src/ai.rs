@@ -1,6 +1,4 @@
 
-use graphics::Vec2d;
-
 use ball::Ball;
 use player::Player;
 use settings;
@@ -19,10 +17,8 @@ impl AI {
     }
 
     pub fn update(&mut self, dt: f64, player: &mut Player, ball: &mut Ball) {
-        let Vec2d(ball_pos) = ball.position();
-        let Vec2d(player_pos) = player.position();
-        let Vec2d(size) = ball.aabb().size;
-        let d = ball_pos[1] - player_pos[1];
+        let d = ball.position()[1] - player.position()[1];
+        let size = ball.aabb().size;
 
         if self.awake_time > 0.0 {
             self.awake_time -= dt;

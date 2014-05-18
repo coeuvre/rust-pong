@@ -7,7 +7,7 @@ use settings;
 
 pub struct Player {
     score: int,
-    pos: Vec2d,
+    pos: [f64, ..2],
     vy: f64,
     aabb: AABB,
 
@@ -18,7 +18,7 @@ impl Player {
     pub fn new(image: Image) -> Player {
         Player {
             score: 0,
-            pos: Vec2d([0.0, 0.0]),
+            pos: [0.0, 0.0],
             vy: 0.0,
             aabb: AABB::new(0.0, 0.0, image.texture_width as f64, image.texture_height as f64),
             image: image,
@@ -29,7 +29,7 @@ impl Player {
         self.aabb.trans(self.pos)
     }
 
-    pub fn position(&self) -> Vec2d {
+    pub fn position(&self) -> [f64, ..2] {
         self.pos
     }
 
@@ -37,9 +37,8 @@ impl Player {
         self.score
     }
 
-    pub fn set_pos(&mut self, pos: Vec2d) {
-        let Vec2d(pos) = pos;
-        self.pos = Vec2d([pos[0], pos[1]]);
+    pub fn set_pos(&mut self, pos: [f64, ..2]) {
+        self.pos = [pos[0], pos[1]];
     }
 
     pub fn start_moving_up(&mut self) {
@@ -59,8 +58,7 @@ impl Player {
     }
 
     pub fn render(&self, c: &Context, gl: &mut Gl) {
-        let Vec2d(pos) = self.pos;
-        c.view().trans_local(pos[0], pos[1]).rect_centered(0.0, 0.0, self.image.texture_width as f64 / 2.0, self.image.texture_height as f64 / 2.0).image(self.image).draw(gl);
+        c.view().trans_local(self.pos[0], self.pos[1]).rect_centered(0.0, 0.0, self.image.texture_width as f64 / 2.0, self.image.texture_height as f64 / 2.0).image(self.image).draw(gl);
     }
 
     pub fn update(
@@ -69,26 +67,23 @@ impl Player {
         top_wall_aabb: &AABB,
         bottom_wall_aabb: &AABB
     ) {
-        let Vec2d(mut pos) = self.pos;
-        let Vec2d(size) = self.aabb.size();
+        let size = self.aabb.size();
         let dy = self.vy * dt;
-        let aabb = self.aabb.trans(Vec2d([pos[0], pos[1] + dy]));
+        let aabb = self.aabb.trans([self.pos[0], self.pos[1] + dy]);
 
         if dy < 0.0 {
             if aabb.is_collided_with(top_wall_aabb) {
-                pos[1] = top_wall_aabb.bottom() + size[1] / 2.0;
+                self.pos[1] = top_wall_aabb.bottom() + size[1] / 2.0;
             } else {
-                pos[1] = pos[1] + dy;
+                self.pos[1] += dy;
             }
         } else {
             if aabb.is_collided_with(bottom_wall_aabb) {
-                pos[1] = bottom_wall_aabb.top() - size[1] / 2.0;
+                self.pos[1] = bottom_wall_aabb.top() - size[1] / 2.0;
             } else {
-                pos[1] = pos[1] + dy;
+                self.pos[1] += dy;
             }
         }
-
-        self.pos = Vec2d(pos);
     }
 }
 

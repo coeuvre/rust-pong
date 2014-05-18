@@ -103,10 +103,10 @@ impl Game for App {
         self.player_image = Some(asset_store.load_image(settings::PLAYER_IMAGE));
 
         self.player1 = Some(Player::new(self.player_image.unwrap()));
-        self.player1.get_mut_ref().set_pos(Vec2d([settings::PLAYER_PADDING, settings::WINDOW_SIZE[1] as f64 / 2.0]));
+        self.player1.get_mut_ref().set_pos([settings::PLAYER_PADDING, settings::WINDOW_SIZE[1] as f64 / 2.0]);
 
         self.player2 = Some(Player::new(self.player_image.unwrap()));
-        self.player2.get_mut_ref().set_pos(Vec2d([settings::WINDOW_SIZE[0] as f64 - settings::PLAYER_PADDING, settings::WINDOW_SIZE[1] as f64 / 2.0]));
+        self.player2.get_mut_ref().set_pos([settings::WINDOW_SIZE[0] as f64 - settings::PLAYER_PADDING, settings::WINDOW_SIZE[1] as f64 / 2.0]);
 
         self.ball = Some(Ball::new(self.ball_image.unwrap()));
         self.ball.get_mut_ref().reset();

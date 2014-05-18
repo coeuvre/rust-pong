@@ -2,23 +2,23 @@
 use graphics::*;
 
 pub struct AABB {
-    pub center: Vec2d,
-    pub size: Vec2d,
+    pub center: [f64, ..2],
+    pub size: [f64, ..2],
 }
 
 impl AABB {
     pub fn new(x: f64, y: f64, w: f64, h: f64) -> AABB {
         AABB {
-            center: Vec2d([x, y]),
-            size: Vec2d([w, h]),
+            center: [x, y],
+            size: [w, h],
         }
     }
 
-    pub fn trans(&self, offset: Vec2d) -> AABB {
-        let Vec2d(center) = self.center;
-        let Vec2d(offset) = offset;
+    pub fn trans(&self, offset: [f64, ..2]) -> AABB {
+        let &center = &self.center;
+        let &offset = &offset;
         AABB {
-            center: Vec2d([center[0] + offset[0], center[1] + offset[1]]),
+            center: [center[0] + offset[0], center[1] + offset[1]],
             size: self.size,
         }
     }
@@ -31,30 +31,22 @@ impl AABB {
     }
 
     pub fn left(&self) -> f64 {
-        let Vec2d(center) = self.center;
-        let Vec2d(size) = self.size;
-        center[0] - size[0] / 2.0
+        self.center[0] - self.size[0] / 2.0
     }
 
     pub fn right(&self) -> f64 {
-        let Vec2d(center) = self.center;
-        let Vec2d(size) = self.size;
-        center[0] + size[0] / 2.0
+        self.center[0] + self.size[0] / 2.0
     }
 
     pub fn top(&self) -> f64 {
-        let Vec2d(center) = self.center;
-        let Vec2d(size) = self.size;
-        center[1] - size[1] / 2.0
+        self.center[1] - self.size[1] / 2.0
     }
 
     pub fn bottom(&self) -> f64 {
-        let Vec2d(center) = self.center;
-        let Vec2d(size) = self.size;
-        center[1] + size[1] / 2.0
+        self.center[1] + self.size[1] / 2.0
     }
 
-    pub fn size(&self) -> Vec2d {
+    pub fn size(&self) -> [f64, ..2] {
         self.size
     }
 }
