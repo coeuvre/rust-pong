@@ -58,7 +58,7 @@ impl Player {
     }
 
     pub fn render(&self, c: &Context, gl: &mut Gl) {
-        c.view().trans_local(self.pos[0], self.pos[1]).rect_centered(0.0, 0.0, self.image.texture_width as f64 / 2.0, self.image.texture_height as f64 / 2.0).image(self.image).draw(gl);
+        c.view().rect_centered(self.pos[0], self.pos[1], self.image.texture_width as f64 / 2.0, self.image.texture_height as f64 / 2.0).image(self.image).draw(gl);
     }
 
     pub fn update(
