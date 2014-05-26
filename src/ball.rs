@@ -107,7 +107,7 @@ impl Ball {
             } else {
                 -0.5
             };
-            self.set_direction(dx, rand::random::<f64>() * 2.0 - 1.0);
+            self.set_direction(dx, 0.0);
         }
     }
 
