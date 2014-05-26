@@ -71,7 +71,7 @@ impl App {
 }
 
 impl Game for App {
-    fn render(&self, c: &Context, gl: &mut Gl) {
+    fn render(&self, _ext_dt: f64, c: &Context, gl: &mut Gl) {
         c.view().image(self.background_image.unwrap()).draw(gl);
 
         self.player1.get_ref().render(c, gl);
@@ -98,9 +98,9 @@ impl Game for App {
     }
 
     fn load(&mut self, asset_store: &mut AssetStore) {
-        self.background_image = Some(asset_store.load_image(settings::BACKGROUND_IMAGE));
-        self.ball_image = Some(asset_store.load_image(settings::BALL_IMAGE));
-        self.player_image = Some(asset_store.load_image(settings::PLAYER_IMAGE));
+        self.background_image = Some(asset_store.load_image(settings::BACKGROUND_IMAGE).unwrap());
+        self.ball_image = Some(asset_store.load_image(settings::BALL_IMAGE).unwrap());
+        self.player_image = Some(asset_store.load_image(settings::PLAYER_IMAGE).unwrap());
 
         self.player1 = Some(Player::new(self.player_image.unwrap()));
         self.player1.get_mut_ref().set_pos([settings::PLAYER_PADDING, settings::WINDOW_SIZE[1] as f64 / 2.0]);
