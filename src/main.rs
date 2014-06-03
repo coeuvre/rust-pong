@@ -1,8 +1,6 @@
 
 #![feature(globs)]
 
-extern crate rand;
-
 extern crate graphics;
 extern crate piston;
 
@@ -19,13 +17,13 @@ type GameWindowBackEnd = GameWindowSDL2;
 
 fn main() {
     let mut game_window: GameWindowBackEnd = GameWindow::new(
-        GameWindowSettings::new (
-            "Rust-Pong".to_owned(),
-            settings::WINDOW_SIZE,
-            false,
-            true,
-            [0.0, 0.0, 0.0, 1.0]
-        )
+        GameWindowSettings {
+            title: "Rust-Pong".to_string(),
+            size: settings::WINDOW_SIZE,
+            fullscreen: false,
+            exit_on_esc: true,
+            background_color: [0.0, 0.0, 0.0, 1.0]
+        }
     );
 
     let mut asset_store = AssetStore::from_folder(settings::ASSET_FOLDER);

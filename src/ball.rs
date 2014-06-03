@@ -1,5 +1,6 @@
 
-use rand;
+use std::rc::Rc;
+use std::rand::random;
 
 use graphics::*;
 use piston::*;
@@ -14,16 +15,17 @@ pub struct Ball {
 
     aabb: AABB,
 
-    image: Image,
+    image: Rc<Texture>,
 }
 
 impl Ball {
-    pub fn new(image: Image) -> Ball {
+    pub fn new(image: Rc<Texture>) -> Ball {
+        let (w, h) = image.get_size();
         Ball {
             pos: [0.0, 0.0],
             v: [0.0, 0.0],
 
-            aabb: AABB::new(0.0, 0.0, image.texture_width as f64, image.texture_height as f64),
+            aabb: AABB::new(0.0, 0.0, w as f64, h as f64),
 
             image: image,
         }
@@ -97,12 +99,14 @@ impl Ball {
     }
 
     pub fn render(&self, c: &Context, gl: &mut Gl) {
-        c.view().rect_centered(self.pos[0], self.pos[1], self.image.texture_width as f64 / 2.0, self.image.texture_height as f64 / 2.0).image(self.image).draw(gl);
+        let (w, h) = self.image.get_size();
+        c.rect_centered(self.pos[0], self.pos[1], w as f64 / 2.0, h as f64 / 2.0)
+         .image(&*self.image).draw(gl);
     }
 
     pub fn emit(&mut self) {
         if self.v[0] == 0.0 && self.v[1] == 0.0 {
-            let dx = if rand::random::<f64>() > 0.5 {
+            let dx = if random::<f64>() > 0.5 {
                 0.5
             } else {
                 -0.5
@@ -127,7 +131,7 @@ impl Ball {
         let player_pos = player.position();
         let mut y = self.pos[1] - player_pos[1];
 
-        y = y * rand::random::<f64>() * 0.4 + 0.8;
+        y = y * random::<f64>() * 0.4 + 0.8;
 
         let size =  player.aabb().size;
         if y > size[1] / 2.0 {

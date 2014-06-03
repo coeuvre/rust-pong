@@ -1,4 +1,6 @@
 
+use std::rc::Rc;
+
 use graphics::*;
 use piston::*;
 
@@ -9,9 +11,9 @@ use settings;
 use player::Player;
 
 pub struct App {
-    background_image: Option<Image>,
-    ball_image: Option<Image>,
-    player_image: Option<Image>,
+    background_image: Option<Texture>,
+    ball_image: Option<Rc<Texture>>,
+    player_image: Option<Rc<Texture>>,
 
     player1: Option<Player>,
     player2: Option<Player>,
@@ -72,7 +74,7 @@ impl App {
 
 impl Game for App {
     fn render(&self, _ext_dt: f64, c: &Context, gl: &mut Gl) {
-        c.view().image(self.background_image.unwrap()).draw(gl);
+        c.image(self.background_image.get_ref()).draw(gl);
 
         self.player1.get_ref().render(c, gl);
         self.player2.get_ref().render(c, gl);
@@ -98,17 +100,17 @@ impl Game for App {
     }
 
     fn load(&mut self, asset_store: &mut AssetStore) {
-        self.background_image = Some(asset_store.load_image(settings::BACKGROUND_IMAGE).unwrap());
-        self.ball_image = Some(asset_store.load_image(settings::BALL_IMAGE).unwrap());
-        self.player_image = Some(asset_store.load_image(settings::PLAYER_IMAGE).unwrap());
+        self.background_image = Some(Texture::from_path(&asset_store.path(settings::BACKGROUND_IMAGE).unwrap()).unwrap());
+        self.ball_image = Some(Rc::<Texture>::new(Texture::from_path(&asset_store.path(settings::BALL_IMAGE).unwrap()).unwrap()));
+        self.player_image = Some(Rc::<Texture>::new(Texture::from_path(&asset_store.path(settings::PLAYER_IMAGE).unwrap()).unwrap()));
 
-        self.player1 = Some(Player::new(self.player_image.unwrap()));
+        self.player1 = Some(Player::new(self.player_image.get_ref().clone()));
         self.player1.get_mut_ref().set_pos([settings::PLAYER_PADDING, settings::WINDOW_SIZE[1] as f64 / 2.0]);
 
-        self.player2 = Some(Player::new(self.player_image.unwrap()));
+        self.player2 = Some(Player::new(self.player_image.get_ref().clone()));
         self.player2.get_mut_ref().set_pos([settings::WINDOW_SIZE[0] as f64 - settings::PLAYER_PADDING, settings::WINDOW_SIZE[1] as f64 / 2.0]);
 
-        self.ball = Some(Ball::new(self.ball_image.unwrap()));
+        self.ball = Some(Ball::new(self.ball_image.get_ref().clone()));
         self.ball.get_mut_ref().reset();
 
         self.ai = Some(AI::new());

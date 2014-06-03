@@ -1,4 +1,6 @@
 
+use std::rc::Rc;
+
 use graphics::*;
 use piston::*;
 
@@ -11,16 +13,17 @@ pub struct Player {
     vy: f64,
     aabb: AABB,
 
-    image: Image,
+    image: Rc<Texture>,
 }
 
 impl Player {
-    pub fn new(image: Image) -> Player {
+    pub fn new(image: Rc<Texture>) -> Player {
+        let (w, h) = image.get_size();
         Player {
             score: 0,
             pos: [0.0, 0.0],
             vy: 0.0,
-            aabb: AABB::new(0.0, 0.0, image.texture_width as f64, image.texture_height as f64),
+            aabb: AABB::new(0.0, 0.0, w as f64, h as f64),
             image: image,
         }
     }
@@ -58,7 +61,9 @@ impl Player {
     }
 
     pub fn render(&self, c: &Context, gl: &mut Gl) {
-        c.view().rect_centered(self.pos[0], self.pos[1], self.image.texture_width as f64 / 2.0, self.image.texture_height as f64 / 2.0).image(self.image).draw(gl);
+        let (w, h) = self.image.get_size();
+        c.rect_centered(self.pos[0], self.pos[1], w as f64 / 2.0, h as f64 / 2.0)
+         .image(&*self.image).draw(gl);
     }
 
     pub fn update(

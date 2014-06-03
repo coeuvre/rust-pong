@@ -13,6 +13,6 @@ pub static BALL_MOVE_SPEED: f64 = 550.0;
 
 pub static WALL_RADIUS: f64 = 8.0;
 
-pub static AI_SLEEP_TIME: f64 = 0.3;
+pub static AI_SLEEP_TIME: f64 = 0.2;
 pub static AI_AWAKE_TIME: f64 = 0.5;
 
