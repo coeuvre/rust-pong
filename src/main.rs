@@ -8,9 +8,9 @@ use piston::*;
 
 mod aabb;
 mod ai;
+mod app;
 mod ball;
 mod player;
-mod pong_app;
 mod settings;
 
 type GameWindowBackEnd = GameWindowSDL2;
