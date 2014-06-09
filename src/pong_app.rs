@@ -73,15 +73,15 @@ impl App {
 }
 
 impl Game for App {
-    fn render(&self, _ext_dt: f64, c: &Context, gl: &mut Gl) {
-        c.image(self.background_image.get_ref()).draw(gl);
+    fn render(&self, c: &Context, args: RenderArgs) {
+        c.image(self.background_image.get_ref()).draw(args.gl);
 
-        self.player1.get_ref().render(c, gl);
-        self.player2.get_ref().render(c, gl);
-        self.ball.get_ref().render(c, gl);
+        self.player1.get_ref().render(c, args.gl);
+        self.player2.get_ref().render(c, args.gl);
+        self.ball.get_ref().render(c, args.gl);
     }
 
-    fn update(&mut self, dt: f64, _asset_store: &mut AssetStore) {
+    fn update(&mut self, args: UpdateArgs) {
         if self.is_up_holding && self.is_down_holding {
             self.player1.get_mut_ref().stop_move();
         } else if self.is_up_holding {
@@ -92,11 +92,11 @@ impl Game for App {
             self.player1.get_mut_ref().stop_move();
         }
 
-        self.ai.get_mut_ref().update(dt, self.player2.get_mut_ref(), self.ball.get_mut_ref());
+        self.ai.get_mut_ref().update(args.dt, self.player2.get_mut_ref(), self.ball.get_mut_ref());
 
-        self.player1.get_mut_ref().update(dt, &self.top_wall_aabb, &self.bottom_wall_aabb);
-        self.player2.get_mut_ref().update(dt, &self.top_wall_aabb, &self.bottom_wall_aabb);
-        self.ball.get_mut_ref().update(dt, &self.top_wall_aabb, &self.bottom_wall_aabb, &self.left_wall_aabb, &self.right_wall_aabb, self.player1.get_mut_ref(), self.player2.get_mut_ref());
+        self.player1.get_mut_ref().update(args.dt, &self.top_wall_aabb, &self.bottom_wall_aabb);
+        self.player2.get_mut_ref().update(args.dt, &self.top_wall_aabb, &self.bottom_wall_aabb);
+        self.ball.get_mut_ref().update(args.dt, &self.top_wall_aabb, &self.bottom_wall_aabb, &self.left_wall_aabb, &self.right_wall_aabb, self.player1.get_mut_ref(), self.player2.get_mut_ref());
     }
 
     fn load(&mut self, asset_store: &mut AssetStore) {
@@ -116,34 +116,26 @@ impl Game for App {
         self.ai = Some(AI::new());
     }
 
-    fn key_press(
-        &mut self,
-        key: keyboard::Key,
-        _asset_store: &mut AssetStore
-    ) {
-        if key == keyboard::Up {
+    fn key_press(&mut self, args: KeyPressArgs) {
+        if args.key == keyboard::Up {
             self.is_up_holding = true;
         }
 
-        if key == keyboard::Down {
+        if args.key == keyboard::Down {
             self.is_down_holding = true;
         }
 
-        if key == keyboard::Space {
+        if args.key == keyboard::Space {
             self.ball.get_mut_ref().emit();
         }
     }
 
-    fn key_release(
-        &mut self,
-        key: keyboard::Key,
-        _asset_store: &mut AssetStore
-    ) {
-        if key == keyboard::Up {
+    fn key_release(&mut self, args: KeyReleaseArgs) {
+        if args.key == keyboard::Up {
             self.is_up_holding = false;
         }
 
-        if key == keyboard::Down {
+        if args.key == keyboard::Down {
             self.is_down_holding = false;
         }
     }

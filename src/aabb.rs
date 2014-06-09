@@ -1,6 +1,4 @@
 
-use graphics::*;
-
 pub struct AABB {
     pub center: [f64, ..2],
     pub size: [f64, ..2],
